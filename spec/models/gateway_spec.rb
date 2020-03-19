@@ -2,7 +2,9 @@ require 'rails_helper'
 
 describe Gateway do
 
-  let(:transaction) { PaymentTransaction.new(transaction_type: 'sale') }
+  include PaymentTransactionHelper
+
+  let(:transaction) { PaymentTransaction.new(transaction_type: PaymentTransaction::TYPE_SALE) }
 
   context '.process!' do
 
@@ -47,7 +49,7 @@ describe Gateway do
         expect(gateway.process_transaction!).to eq gateway_response(sale_transaction)
 
         sale_transaction.save
-        void_transaction = PaymentTransaction.new(void_transaction_params(sale_transaction.unique_id))
+        void_transaction = PaymentTransaction.new(void_transaction_params(sale_transaction))
         void_gateway     = Gateway.new(void_transaction)
 
         expect(void_gateway.process_transaction!).to eq(
@@ -119,29 +121,4 @@ describe Gateway do
     }
   end
 
-  def sale_transaction_params
-    {
-      card_holder: 'Panda Panda',
-      card_number: '4200000000000000',
-      cvv: '123',
-      expiration_date: '09/2016',
-      email: 'panda@example.com',
-      amount: 100,
-      usage: 'New por',
-      transaction_type: 'sale',
-      reference_id: nil,
-      address: {
-                  first_name: 'Panda',
-                  last_name: 'Panda',
-                  city: 'Sofia'
-                }
-    }
-  end
-
-  def void_transaction_params(unique_id)
-    {
-      transaction_type: 'void',
-      reference_id:     unique_id
-    }
-  end
 end
