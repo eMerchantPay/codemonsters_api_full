@@ -48,14 +48,14 @@ module V1
 
         post :create, params: json_payload_sale
 
-        expect(response.status).to eq 401
+        expect(response).to have_http_status :unauthorized
         expect(response.body).to include 'Access denied'
       end
 
       it 'requires valid credentials' do
         post :create, params: json_payload_sale
 
-        expect(response.status).to eq 401
+        expect(response).to have_http_status :unauthorized
         expect(response.body).to include 'Access denied'
       end
     end

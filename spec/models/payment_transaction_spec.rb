@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 describe PaymentTransaction do
-  ATTRIBUTES_FOR_PRESENCE_VALIDATION = [:card_holder, :card_number, :usage, :email, :amount, :address]
+
+  include PaymentTransactionHelper
 
   let(:transaction) { described_class.new(sale_transaction_params) }
 
@@ -34,6 +35,8 @@ describe PaymentTransaction do
 
     context 'step 11' do
 
+      before(:each) { allow(SecureRandom).to receive(:hex).with(16).and_return('11f0c7f0e46ef8c37c1ad99344ebed36') }
+
       it 'builds void transaction from params' do
         expect(PaymentTransaction).to receive(:build_from_reference).with(void_transaction_params)
 
@@ -43,23 +46,39 @@ describe PaymentTransaction do
 
     context 'when transaction type is void' do
 
-      context 'reference is invalid' do
+      context 'when the referenced transaction does not exist' do
+
+        let(:non_existent_reference_trx_unique_id) { generate_unique_id }
 
         it 'returns invalid transaction' do
-          transaction = described_class.factory!({reference_id: 'dddd', transaction_type: PaymentTransaction::TYPE_VOID})
+          transaction = described_class.factory!(reference_id:     non_existent_reference_trx_unique_id,
+                                                 transaction_type: PaymentTransaction::TYPE_VOID)
 
           expect(transaction).to_not be_valid
           expect(transaction.errors[:reference_id]).to include 'Invalid reference transaction!'
         end
       end
 
-      context 'reference is valid' do
+      context "when the referenced transaction is not a #{described_class::TYPE_SALE} transaction" do
+
+        let(:persisted_void_transaction) { create_void_transaction }
+
+        it 'returns invalid transaction' do
+          transaction = described_class.factory!(reference_id:     persisted_void_transaction.unique_id,
+                                                 transaction_type: PaymentTransaction::TYPE_VOID)
+
+          expect(transaction).to_not be_valid
+          expect(transaction.errors[:reference_id]).to include 'Invalid reference transaction!'
+        end
+      end
+
+      context 'when the reference is valid' do
 
         it 'builds transaction from reference' do
-          transaction.status = 'approved'
+          transaction.status = described_class::STATUS_APPROVED
           transaction.save
 
-          void_transaction = described_class.factory!({reference_id: transaction.unique_id, transaction_type: PaymentTransaction::TYPE_VOID})
+          void_transaction = described_class.factory!(reference_id: transaction.unique_id, transaction_type: PaymentTransaction::TYPE_VOID)
 
           expect(void_transaction).to be_valid
           expect(void_transaction.card_holder).to eq transaction.card_holder
@@ -78,30 +97,5 @@ describe PaymentTransaction do
         transaction.process!
       end
     end
-  end
-
-  def sale_transaction_params
-    {
-      card_holder: 'Panda Panda',
-      card_number: '4200000000000000',
-      cvv: '123',
-      expiration_date: '09/2016',
-      email: 'panda@example.com',
-      amount: 100,
-      usage: 'New por',
-      transaction_type: 'sale',
-      address: {
-                  first_name: 'Panda',
-                  last_name: 'Panda',
-                  city: 'Sofia'
-                }
-    }
-  end
-
-  def void_transaction_params
-    {
-      transaction_type: 'void',
-      reference_id:     '1234'
-    }
   end
 end
