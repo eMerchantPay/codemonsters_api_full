@@ -110,7 +110,7 @@ address|Customer's address
 ```json
 $ curl http://localhost:3001/payment_transactions \
     -H "Content-Type: application/json;charset=UTF-8" \
-    -H "Authorization: Basic cGFuZGFoYXB2YTprYWNoYW1haw==" \
+    -H "Authorization: Basic Y29kZW1vbnN0ZXI6bXk1ZWNyZXQta2V5Mm8ybw==" \
     -d '{
     "payment_transaction": {
       "card_number": "4200000000000000",
@@ -158,7 +158,7 @@ transaction_type|void
 ```json
 $ curl http://localhost:3001/payment_transactions \
     -H "Content-Type: application/json;charset=UTF-8" \
-    -H "Authorization: Basic cGFuZGFoYXB2YTprYWNoYW1haw==" \
+    -H "Authorization: Basic Y29kZW1vbnN0ZXI6bXk1ZWNyZXQta2V5Mm8ybw==" \
     -d '{
     "payment_transaction": {
       "reference_id": "0e08644635ccb520c2eeb54f33865660",
