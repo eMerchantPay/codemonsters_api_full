@@ -35,11 +35,12 @@ sudo apt-get install git-core curl zlib1g-dev build-essential libssl-dev libread
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 curl -sSL https://get.rvm.io | bash -s stable
 source ~/.rvm/scripts/rvm
-rvm install 2.2.2
-rvm use 2.2.2 --default
+rvm install 2.6.5
 ruby -v
 
-gem install bundler
+gem install bundler -v 2.1.4
+
+bundler -v
 ```
 
 * Configure Git **optional**
