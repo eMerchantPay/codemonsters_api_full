@@ -5,8 +5,8 @@ module V1
 
     let(:card_number)   { '4200000000000000' }
     let(:cvv)           { '123' }
-    let(:username)      { 'pandahapva' }
-    let(:password)      { 'kachamak' }
+    let(:username)      { 'codemonster' }
+    let(:password)      { 'my5ecret-key2o2o' }
     let(:auth_string)   { ActionController::HttpAuthentication::Basic.encode_credentials(username, password) }
 
     let(:transaction_params) do
