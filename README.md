@@ -35,11 +35,12 @@ sudo apt-get install git-core curl zlib1g-dev build-essential libssl-dev libread
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 curl -sSL https://get.rvm.io | bash -s stable
 source ~/.rvm/scripts/rvm
-rvm install 2.2.2
-rvm use 2.2.2 --default
+rvm install 2.6.5
 ruby -v
 
-gem install bundler
+gem install bundler -v 2.1.4
+
+bundler -v
 ```
 
 * Configure Git **optional**
@@ -109,7 +110,7 @@ address|Customer's address
 ```json
 $ curl http://localhost:3001/payment_transactions \
     -H "Content-Type: application/json;charset=UTF-8" \
-    -H "Authorization: Basic cGFuZGFoYXB2YTprYWNoYW1haw==" \
+    -H "Authorization: Basic Y29kZW1vbnN0ZXI6bXk1ZWNyZXQta2V5Mm8ybw==" \
     -d '{
     "payment_transaction": {
       "card_number": "4200000000000000",
@@ -157,7 +158,7 @@ transaction_type|void
 ```json
 $ curl http://localhost:3001/payment_transactions \
     -H "Content-Type: application/json;charset=UTF-8" \
-    -H "Authorization: Basic cGFuZGFoYXB2YTprYWNoYW1haw==" \
+    -H "Authorization: Basic Y29kZW1vbnN0ZXI6bXk1ZWNyZXQta2V5Mm8ybw==" \
     -d '{
     "payment_transaction": {
       "reference_id": "0e08644635ccb520c2eeb54f33865660",
