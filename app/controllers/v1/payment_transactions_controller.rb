@@ -2,7 +2,6 @@ module V1
   class PaymentTransactionsController < ApplicationController
 
     def create
-      ##TODO check payment_transaction.rb
       payment_transaction = PaymentTransaction.factory!(payment_transaction_params)
 
       if payment_transaction.save

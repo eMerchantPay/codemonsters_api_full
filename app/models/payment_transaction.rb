@@ -58,7 +58,6 @@ class PaymentTransaction < ApplicationRecord
 
 
   def process!
-    ##TODO pass transaction to Gateway to be processed
     Gateway.process!(self)
   end
 
@@ -75,7 +74,7 @@ class PaymentTransaction < ApplicationRecord
   def validates_approved_reference
     return if PaymentTransaction.approved_reference_transaction_for(reference_id).present?
 
-    errors[:reference_id] << 'Invalid reference transaction!'
+    errors.add(:reference_id, 'Invalid reference transaction!')
   end
 
 end
